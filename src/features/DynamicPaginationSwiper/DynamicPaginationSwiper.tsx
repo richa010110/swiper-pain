@@ -82,14 +82,26 @@ export function DynamicPaginationSwiper({
     const first = bullets[0]
     const second = bullets[1]
     const bulletWidthPx = first?.offsetWidth ?? 0
-    const stepPx =
-      second && first ? second.offsetLeft - first.offsetLeft : bulletWidthPx
-    const translatePx = stepPx > 0 ? start * stepPx : 0
+    const stepPx = (() => {
+      if (!first || !second) return bulletWidthPx
+
+      const offsetStep = second.offsetLeft - first.offsetLeft
+      if (offsetStep !== 0) return offsetStep
+
+      const firstRect = first.getBoundingClientRect()
+      const secondRect = second.getBoundingClientRect()
+      const rectStep = secondRect.left - firstRect.left
+      if (rectStep !== 0) return rectStep
+
+      return bulletWidthPx
+    })()
+    const stepAbsPx = Math.abs(stepPx)
+    const translatePx = stepAbsPx > 0 ? start * stepPx : 0
     paginationEl.style.transform = `translateX(${-translatePx}px)`
 
     if (visibleCount < total) {
       const widthPx =
-        stepPx > 0 ? stepPx * (visibleCount - 1) + bulletWidthPx : 0
+        stepAbsPx > 0 ? stepAbsPx * (visibleCount - 1) + bulletWidthPx : 0
       paginationWrapperEl.style.width = widthPx > 0 ? `${widthPx}px` : ''
     } else {
       paginationWrapperEl.style.width = ''
