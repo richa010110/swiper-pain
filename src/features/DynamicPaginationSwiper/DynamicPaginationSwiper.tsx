@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Swiper as SwiperInstance } from 'swiper'
 import { Pagination } from 'swiper/modules'
 import { Swiper, type SwiperProps } from 'swiper/react'
@@ -7,14 +7,12 @@ import 'swiper/css'
 
 import styles from './DynamicPaginationSwiper.module.scss'
 
-export type DynamicPaginationSwiperProps = SwiperProps & {
-  maxPaginationBullets?: number
-}
+export type DynamicPaginationSwiperProps = SwiperProps
 
 export function DynamicPaginationSwiper({
   children,
-  maxPaginationBullets = 5,
   className,
+  maxPaginationBullets,
   modules,
   onBeforeInit,
   ...props
@@ -24,12 +22,6 @@ export function DynamicPaginationSwiper({
   const refId = useRef<number | null>(null)
   const paginationWrapperRef = useRef<HTMLDivElement | null>(null)
   const paginationElRef = useRef<HTMLDivElement | null>(null)
-
-  const maxVisible = useMemo(() => {
-    const value = Math.floor(maxPaginationBullets)
-    if (!Number.isFinite(value) || value <= 0) return 1
-    return value
-  }, [maxPaginationBullets])
 
   const updatePagination = useCallback(() => {
     const swiper = swiperRef.current
@@ -47,6 +39,12 @@ export function DynamicPaginationSwiper({
     if (bullets.length === 0) return
 
     const total = bullets.length
+
+    const maxVisible = (() => {
+      const value = Math.floor(swiper.params.maxPaginationBullets ?? Number.NaN)
+      return Number.isFinite(value) && value > 0 ? value : 3
+    })()
+
     const visibleCount = Math.min(maxVisible, total)
 
     let current = 0
@@ -105,7 +103,7 @@ export function DynamicPaginationSwiper({
     } else {
       paginationWrapperEl.style.width = ''
     }
-  }, [maxVisible])
+  }, [])
 
   useEffect(() => {
     const swiper = swiperRef.current
@@ -141,6 +139,10 @@ export function DynamicPaginationSwiper({
       modules={[Pagination, ...(modules ?? [])]}
       onBeforeInit={(instance) => {
         swiperRef.current = instance
+
+        instance.params.maxPaginationBullets = maxPaginationBullets
+        instance.originalParams.maxPaginationBullets = maxPaginationBullets
+
         if (
           instance.params.pagination &&
           typeof instance.params.pagination !== 'boolean'

@@ -11,9 +11,11 @@ export function App() {
         <DynamicPaginationSwiper
           slidesPerView={2.2}
           spaceBetween={12}
+          maxPaginationBullets={3}
           breakpoints={{
             768: {
               slidesPerView: 3,
+              maxPaginationBullets: 5,
             },
           }}
         >
