@@ -13,16 +13,15 @@ export type DynamicPaginationSwiperProps = SwiperProps & {
 
 export function DynamicPaginationSwiper({
   children,
-  maxPaginationBullets = 7,
+  maxPaginationBullets = 5,
   className,
   modules,
   onBeforeInit,
-  onSwiper,
   ...props
 }: DynamicPaginationSwiperProps) {
   const swiperRef = useRef<SwiperInstance | null>(null)
   const [isReady, setIsReady] = useState(false)
-  const rafId = useRef<number | null>(null)
+  const refId = useRef<number | null>(null)
   const paginationWrapperRef = useRef<HTMLDivElement | null>(null)
   const paginationElRef = useRef<HTMLDivElement | null>(null)
 
@@ -113,8 +112,8 @@ export function DynamicPaginationSwiper({
     if (!isReady || !swiper) return
 
     const schedule = () => {
-      if (rafId.current != null) cancelAnimationFrame(rafId.current)
-      rafId.current = requestAnimationFrame(updatePagination)
+      if (refId.current != null) cancelAnimationFrame(refId.current)
+      refId.current = requestAnimationFrame(updatePagination)
     }
 
     schedule()
@@ -122,16 +121,16 @@ export function DynamicPaginationSwiper({
     swiper.on('slideChange', schedule)
     swiper.on('snapIndexChange', schedule)
     swiper.on('paginationUpdate', schedule)
-    swiper.on('resize', schedule)
+    swiper.on('breakpoint', schedule)
     swiper.on('update', schedule)
 
     return () => {
       swiper.off('slideChange', schedule)
       swiper.off('snapIndexChange', schedule)
       swiper.off('paginationUpdate', schedule)
-      swiper.off('resize', schedule)
+      swiper.off('breakpoint', schedule)
       swiper.off('update', schedule)
-      if (rafId.current != null) cancelAnimationFrame(rafId.current)
+      if (refId.current != null) cancelAnimationFrame(refId.current)
     }
   }, [isReady, updatePagination])
 
@@ -154,15 +153,12 @@ export function DynamicPaginationSwiper({
         ) {
           instance.originalParams.pagination.el = paginationElRef.current
         }
-        onBeforeInit?.(instance)
-      }}
-      onSwiper={(instance) => {
-        swiperRef.current = instance
         setIsReady(true)
-        onSwiper?.(instance)
+        onBeforeInit?.(instance)
       }}
       pagination={{
         clickable: true,
+        el: styles.pagination,
         renderBullet: (index, bulletClassName) =>
           `<button type="button" class="${bulletClassName} ${styles.bullet}" aria-label="Go to slide ${index + 1}"></button>`,
       }}

@@ -9,9 +9,7 @@ export function App() {
     <div className={styles.app}>
       <Section>
         <DynamicPaginationSwiper
-          maxPaginationBullets={5}
           slidesPerView={2.2}
-          dir="rtl"
           spaceBetween={12}
           breakpoints={{
             768: {
