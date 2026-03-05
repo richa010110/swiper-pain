@@ -31,7 +31,7 @@
       "@pages/*": ["src/pages/*"],
       "@processes/*": ["src/processes/*"],
       "@shared/*": ["src/shared/*"],
-      "@widgets/*": ["src/shared/*"]
+      "@widgets/*": ["src/widgets/*"]
     }
   },
   "include": ["src"]

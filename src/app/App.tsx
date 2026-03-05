@@ -1,13 +1,10 @@
-import { Container } from '@components'
-
 import styles from './App.module.scss'
+import { DynamicPagination } from '@widgets/DynamicPagination'
 
 export function App() {
   return (
     <div className={styles.app}>
-      <Container>
-        <h1 className={styles.title}>Meetup</h1>
-      </Container>
+      <DynamicPagination />
     </div>
   )
 }
