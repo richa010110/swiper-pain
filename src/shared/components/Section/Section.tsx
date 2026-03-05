@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react'
-import { Container } from '@shared/Container'
+import { Container } from '@shared/components/Container'
 import styles from './Section.module.scss'
 
 export const Section = ({ children }: PropsWithChildren) => {

@@ -2,21 +2,22 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Swiper as SwiperInstance } from 'swiper'
 import { Pagination } from 'swiper/modules'
 import { Swiper, type SwiperProps } from 'swiper/react'
+import clsx from 'classnames'
 
 import 'swiper/css'
 
-import styles from './DynamicPaginationSwiper.module.scss'
+import styles from './DynamicPaginationModule.module.scss'
 
-export type DynamicPaginationSwiperProps = SwiperProps
+export type DynamicPaginationModuleProps = SwiperProps
 
-export function DynamicPaginationSwiper({
+export function DynamicPaginationModule({
   children,
   className,
   maxPaginationBullets,
   modules,
   onBeforeInit,
   ...props
-}: DynamicPaginationSwiperProps) {
+}: DynamicPaginationModuleProps) {
   const swiperRef = useRef<SwiperInstance | null>(null)
   const [isReady, setIsReady] = useState(false)
   const refId = useRef<number | null>(null)
@@ -135,7 +136,7 @@ export function DynamicPaginationSwiper({
   return (
     <Swiper
       {...props}
-      className={[styles.root, className].filter(Boolean).join(' ')}
+      className={clsx(styles.root, className)}
       modules={[Pagination, ...(modules ?? [])]}
       onBeforeInit={(instance) => {
         swiperRef.current = instance
@@ -161,16 +162,13 @@ export function DynamicPaginationSwiper({
       pagination={{
         clickable: true,
         el: styles.pagination,
-        renderBullet: (index, bulletClassName) =>
-          `<button type="button" class="${bulletClassName} ${styles.bullet}" aria-label="Go to slide ${index + 1}"></button>`,
+        renderBullet: (_, bulletClassName) =>
+          `<button type="button" class="${bulletClassName} ${styles.bullet}"></button>`,
       }}
     >
       {children}
-      <div ref={paginationWrapperRef} className={styles['pagination-wrapper']}>
-        <div
-          ref={paginationElRef}
-          className={`swiper-pagination ${styles.pagination}`}
-        />
+      <div ref={paginationWrapperRef} className={styles.paginationWrapper}>
+        <div ref={paginationElRef} className={styles.pagination} />
       </div>
     </Swiper>
   )
