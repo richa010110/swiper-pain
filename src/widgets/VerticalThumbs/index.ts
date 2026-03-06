@@ -1,0 +1,2 @@
+export { VerticalThumbs } from './VerticalThumbs'
+

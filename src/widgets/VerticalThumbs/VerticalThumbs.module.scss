@@ -1,0 +1,117 @@
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.status {
+  padding: 6px 10px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+.toggle {
+  padding: 6px 12px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 10px;
+  background: rgb(255 255 255 / 6%);
+  color: inherit;
+  cursor: pointer;
+}
+
+.toggle:hover {
+  background: rgb(255 255 255 / 10%);
+}
+
+.layout {
+  --thumbs-width: 72px;
+
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  height: 320px;
+  margin-bottom: 20px;
+}
+
+@media (width >= 768px) {
+  .layout {
+    --thumbs-width: 96px;
+
+    height: 360px;
+  }
+}
+
+@media (width >= 1024px) {
+  .layout {
+    --thumbs-width: 120px;
+
+    height: 420px;
+  }
+}
+
+.thumbsColumn {
+  display: flex;
+  flex-direction: column;
+  width: var(--thumbs-width);
+  height: 100%;
+  gap: 8px;
+}
+
+.thumbsNav {
+  padding: 6px 8px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 6%);
+  color: inherit;
+  cursor: pointer;
+}
+
+.thumbsNav:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.thumbs {
+  flex: 1;
+  height: auto;
+}
+
+.thumbSlide {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 12px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+.thumbSlide:global(.swiper-slide-thumb-active) {
+  opacity: 1;
+  border-color: rgb(255 255 255 / 25%);
+}
+
+.thumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.main {
+  flex: 1;
+  height: 100%;
+}
+
+.mainSlide {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 16px;
+}
+
+.mainImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
