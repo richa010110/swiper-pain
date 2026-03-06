@@ -1,26 +1,22 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import type { Swiper as SwiperInstance } from 'swiper'
 import { Pagination } from 'swiper/modules'
 import { Swiper, type SwiperProps } from 'swiper/react'
-import clsx from 'classnames'
 
 import 'swiper/css'
 
 import styles from './DynamicPaginationModule.module.scss'
 
-export type DynamicPaginationModuleProps = SwiperProps
-
-export function DynamicPaginationModule({
+export const DynamicPaginationModule = ({
   children,
   className,
   maxPaginationBullets,
   modules,
   onBeforeInit,
   ...props
-}: DynamicPaginationModuleProps) {
+}: SwiperProps) => {
   const swiperRef = useRef<SwiperInstance | null>(null)
-  const [isReady, setIsReady] = useState(false)
-  const refId = useRef<number | null>(null)
+  const rafId = useRef<number | null>(null)
   const paginationWrapperRef = useRef<HTMLDivElement | null>(null)
   const paginationElRef = useRef<HTMLDivElement | null>(null)
 
@@ -108,35 +104,29 @@ export function DynamicPaginationModule({
 
   useEffect(() => {
     const swiper = swiperRef.current
-    if (!isReady || !swiper) return
+    if (!swiper) return
 
     const schedule = () => {
-      if (refId.current != null) cancelAnimationFrame(refId.current)
-      refId.current = requestAnimationFrame(updatePagination)
+      if (rafId.current != null) cancelAnimationFrame(rafId.current)
+      rafId.current = requestAnimationFrame(updatePagination)
     }
 
     schedule()
 
     swiper.on('slideChange', schedule)
-    swiper.on('snapIndexChange', schedule)
-    swiper.on('paginationUpdate', schedule)
     swiper.on('breakpoint', schedule)
-    swiper.on('update', schedule)
 
     return () => {
       swiper.off('slideChange', schedule)
-      swiper.off('snapIndexChange', schedule)
-      swiper.off('paginationUpdate', schedule)
       swiper.off('breakpoint', schedule)
-      swiper.off('update', schedule)
-      if (refId.current != null) cancelAnimationFrame(refId.current)
+      if (rafId.current != null) cancelAnimationFrame(rafId.current)
     }
-  }, [isReady, updatePagination])
+  }, [updatePagination])
 
   return (
     <Swiper
       {...props}
-      className={clsx(styles.root, className)}
+      className={className}
       modules={[Pagination, ...(modules ?? [])]}
       onBeforeInit={(instance) => {
         swiperRef.current = instance
@@ -156,7 +146,6 @@ export function DynamicPaginationModule({
         ) {
           instance.originalParams.pagination.el = paginationElRef.current
         }
-        setIsReady(true)
         onBeforeInit?.(instance)
       }}
       pagination={{
