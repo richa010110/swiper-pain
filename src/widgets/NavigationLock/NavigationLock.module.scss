@@ -1,0 +1,77 @@
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.status {
+  padding: 6px 10px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+.toggle {
+  padding: 6px 12px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 10px;
+  background: rgb(255 255 255 / 6%);
+  color: inherit;
+  cursor: pointer;
+}
+
+.toggle:hover {
+  background: rgb(255 255 255 / 10%);
+}
+
+.swiperWrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.navButton {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  transform: translateY(-50%);
+  padding: 10px 12px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 12px;
+  background: rgb(11 13 16 / 70%);
+  color: inherit;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+
+  &:disabled {
+    cursor: none;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+}
+
+.navButton:hover {
+  background: rgb(11 13 16 / 85%);
+}
+
+.prev {
+  left: 8px;
+}
+
+.next {
+  right: 8px;
+}
+
+.slide {
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 16px;
+}
+
+.slideImg {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
